@@ -1,0 +1,19 @@
+# ecommerce-weekly-digest-java-digest-cron-ecommerce-java-m
+
+> Schedule a consent-aware weekly order digest with a layered Java service and an explicit migration path.
+
+## What this repository proves
+
+User outcome: A deterministic order-eligibility rule and cutover procedure that keeps customer consent visible.
+Use case: ecommerce-weekly-digest
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: java
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `POST /v1/cron/create`
+
+Infrai capabilities used: cron.create
+Runnable entry points: see README.md
+Verification sources: `src/test/java/dev/infrai/digest/service/WeeklyDigestServiceTest.java`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt

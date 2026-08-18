@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+BUILD_DIR="${TMPDIR:-/tmp}/ecommerce-weekly-digest-classes"
+mkdir -p "$BUILD_DIR"
+find src/main/java -name '*.java' -print | xargs javac -d "$BUILD_DIR"
+java -cp "$BUILD_DIR" dev.infrai.digest.DigestCutover preview
