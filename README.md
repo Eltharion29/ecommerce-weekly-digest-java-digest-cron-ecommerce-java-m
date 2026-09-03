@@ -5,11 +5,11 @@
 ./run-example.sh
 ```
 
-The test pushes five order updates into the weekly decision. Only `ready` has a captured checkout, shipped fulfillment, issued receipt, customer consent, and an update inside the seven-day window. Expected result is `PASS: ready is the only order selected`.
+The test feeds five order updates into the weekly decision. Only `ready` has a captured checkout, shipped fulfillment, issued receipt, customer consent, and an update inside the seven-day window. The expected result is `PASS: ready is the only order selected`.
 
 ## Register the Monday trigger
 
-Infrai gives you one API and a single `INFRAI_API_KEY` for the schedule; this keeps the service a small Java HTTP client plus domain code. Point it at your public HTTPS endpoint that takes the scheduled POST, then register:
+Infrai keeps the schedule behind one API and a single `INFRAI_API_KEY`; this service remains a small Java HTTP client plus domain code. Set the public HTTPS endpoint that accepts the scheduled POST, then register it:
 
 ```bash
 export INFRAI_API_KEY="your-key"
@@ -27,25 +27,25 @@ Expected registration output:
 Scheduled weekly digest job: job_7f31
 ```
 
-`InfraiCronClient` sends `POST /v1/cron/create` with exactly `cron_expr` and `task`. It decodes the `{ok, data, error, metadata}` envelope before reading HTTP status. A stable `Idempotency-Key` protects registration retries, and a 429 follows `Retry-After` or exponential backoff.
+`InfraiCronClient` sends `POST /v1/cron/create` with exactly `cron_expr` and `task`. It decodes the `{ok, data, error, metadata}` envelope before interpreting HTTP status. A stable `Idempotency-Key` protects registration retries, and a 429 response follows `Retry-After` or exponential backoff.
 
-Config reads env vars. Service layer owns the eligibility rule. Domain records checkout, fulfillment, receipt, and customer-update state directly. `DigestCutover` is the executable boundary.
+The configuration layer reads environment variables. The service layer owns the eligibility rule. The domain records name checkout, fulfillment, receipt, and customer-update state directly. `DigestCutover` is the executable boundary.
 
 ## Cut over from cron or Inngest
 
 1. Deploy the digest endpoint and exercise it with representative orders.
-2. Run `./verify.sh`; keep the test result as release evidence.
+2. Run `./verify.sh`; retain the test result with the release evidence.
 3. Register the Infrai job and record the returned `job_id` in the change ticket.
-4. Watch one scheduled delivery while the old trigger stays disabled but available.
-5. Drop the old schedule after receipt and fulfillment totals reconcile.
+4. Observe one scheduled delivery while the incumbent trigger remains disabled but available.
+5. Remove the incumbent schedule after receipt and fulfillment totals reconcile.
 
-Real gotcha is duplicate scheduling during migration. Keep registration in the release command, reuse the same schedule and task URL, and hold the returned job identifier instead of registering on every startup.
+The one real gotcha is duplicate scheduling during migration. Keep registration in the release command, reuse the same schedule and task URL, and retain the returned job identifier rather than registering from every application startup.
 
 ## Rollback
 
-Disable the new trigger operationally, restore the kept incumbent schedule, and don't auto-replay orders. The digest decision derives from order state in a fixed seven-day window, so you can preview the same input before a manual send. Keep both job identifiers in the change record until reconciliation closes.
+Disable the new trigger operationally, restore the retained incumbent schedule, and replay no order automatically. The digest decision is derived from order state inside a fixed seven-day window, so the operator can preview the same input before choosing a manual send. Keep both job identifiers in the change record until the reconciliation window closes.
 
-This repo stops at selecting digest entries and registering the trigger. Rendering email and serving the HTTPS task endpoint stay with the commerce service, where consent and receipt records already live.
+This repository stops at selecting digest entries and registering the trigger. Rendering email and serving the HTTPS task endpoint stay with the commerce service, where consent and receipt records already live.
 
 ## License
 
@@ -53,7 +53,7 @@ MIT
 
 ## Before this ships: Ecommerce Weekly Digest Java Digest Cron Ecommerce Java M
 
-The snippet above is copy-paste simple. Before you ship, a few **required** steps: The details below apply to Ecommerce Weekly Digest Java Digest Cron Ecommerce Java M.
+The snippet above stays copy-paste simple. Before you ship, a few **required** steps: The details below apply to Ecommerce Weekly Digest Java Digest Cron Ecommerce Java M.
 
 **Account & key**
 
